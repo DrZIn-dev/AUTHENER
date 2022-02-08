@@ -10,7 +10,7 @@
         "outputPath": "dist/apps/authener",
         "main": "apps/authener/src/main.ts",
         "tsConfig": "apps/authener/tsconfig.app.json",
-        "assets": ["apps/authener/src/assets"]
+        "assets": []
       },
       "configurations": {
         "production": {
