@@ -1,6 +1,6 @@
 {
   "version": 2,
   "projects": {
-    "authener": "apps/authener"
+    "back-end": "apps/back-end"
   }
 }
