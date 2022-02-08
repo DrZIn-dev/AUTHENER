@@ -1,2 +1,2 @@
 # AUTHENER
-authentication server by meDev.house
+authentication server by medev.house. build of nx workspace, nest.js and react.js
