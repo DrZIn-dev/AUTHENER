@@ -1,8 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude, Transform } from 'class-transformer';
 import { IsNotEmpty, IsString } from 'class-validator';
-import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
-import { User } from '../../decorator/user.decorator';
+import {
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 import { BaseEntity } from '../base/base.entity';
 import { UserRoleEntity } from '../user-role/user-role.entity';
 import { UserSessionEntity } from '../user-session/user-session.entity';
@@ -57,7 +63,8 @@ export class UserEntity extends BaseEntity implements IUser {
   })
   userRoles: UserRoleEntity[];
 
-  @OneToOne(() => UserEntity)
+  @ManyToOne(() => UserEntity)
   @JoinColumn({ name: 'issuer_id' })
+  @Index({ unique: false })
   issuer: UserEntity;
 }
