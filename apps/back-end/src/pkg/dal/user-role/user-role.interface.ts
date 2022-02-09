@@ -5,6 +5,7 @@ export enum USER_ROLE {
   ADMIN = 'ADMIN',
   MAINTAINER = 'MAINTAINER',
   USER = 'USER',
+  GUEST = 'GUEST',
 }
 
 export interface IUserRole extends IBase {
