@@ -22,7 +22,7 @@ export class UserSessionEntity extends BaseEntity implements IUserSession {
   accessToken: string;
 
   @ApiProperty()
-  @Column({ name: 'refresh_token', type: 'text' })
+  @Column({ name: 'refresh_token', type: 'text', nullable: true })
   @Exclude()
   refreshToken: string;
 }
