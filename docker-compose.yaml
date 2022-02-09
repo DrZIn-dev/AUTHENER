@@ -1,0 +1,9 @@
+version: '3.7'
+
+services:
+  postgres:
+    image: postgres:14.1
+    environment:
+      POSTGRES_PASSWORD: meDev2021m
+    ports:
+      - 5432:5432

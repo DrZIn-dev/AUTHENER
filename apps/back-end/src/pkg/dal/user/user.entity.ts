@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude, Transform } from 'class-transformer';
 import { IsNotEmpty, IsString } from 'class-validator';
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
+import { User } from '../../decorator/user.decorator';
 import { BaseEntity } from '../base/base.entity';
 import { UserRoleEntity } from '../user-role/user-role.entity';
 import { UserSessionEntity } from '../user-session/user-session.entity';
@@ -55,4 +56,8 @@ export class UserEntity extends BaseEntity implements IUser {
     cascade: ['soft-remove', 'insert', 'update'],
   })
   userRoles: UserRoleEntity[];
+
+  @OneToOne(() => UserEntity)
+  @JoinColumn({ name: 'issuer_id' })
+  issuer: UserEntity;
 }
