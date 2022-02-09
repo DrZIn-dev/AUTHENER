@@ -16,6 +16,7 @@ import { SignUpDto } from '../auth/auth.dto';
 import { USER_ROLE } from '../pkg/dal/user-role/user-role.interface';
 import { UserEntity } from '../pkg/dal/user/user.entity';
 import { Roles } from '../pkg/decorator/role.decorator';
+import { User } from '../pkg/decorator/user.decorator';
 import { JwtAuthGuard } from '../pkg/guard/jwt-auth.guard';
 import { RolesGuard } from '../pkg/guard/roles.guard';
 import { UpdateUserDto } from './user.dto';
@@ -31,6 +32,14 @@ export class UserController {
   @ApiOkResponse({ type: UserEntity })
   signUp(@Body() dto: SignUpDto) {
     return this.userService.create(dto);
+  }
+
+  @Post('/guest')
+  @ApiOkResponse({ type: UserEntity })
+  @Roles(...[USER_ROLE.ADMIN, USER_ROLE.USER])
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  createGuest(@User() user: UserEntity) {
+    return this.userService.createGuest(user);
   }
 
   @Get('/')
