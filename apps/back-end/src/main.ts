@@ -13,7 +13,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Authentication by meDev.')
     .setDescription('This is authentication server docs')
-    .setVersion('1.0')
+    .setVersion('1.1')
     .addBearerAuth()
     .build();
 
