@@ -71,7 +71,6 @@ export class UserService {
     userSession.accessToken = accessToken;
     user.userSessions = [userSession];
 
-    console.log(user);
     const result = await this.userRepository.save(user).catch((error) => {
       throw new InternalServerErrorException(error.message);
     });
