@@ -53,7 +53,6 @@ jobs:
           push: true
           context: .
           file: ./apps/back-end/Dockerfile
-          target: production
           tags: |
             ghcr.io/${{ steps.repository.outputs.lowercase }}:latest
             ghcr.io/${{ steps.repository.outputs.lowercase }}:${{needs.release.outputs.version}}
