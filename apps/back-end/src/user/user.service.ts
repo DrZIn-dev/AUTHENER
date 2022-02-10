@@ -8,7 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as bcryptjs from 'bcryptjs';
 import { nanoid } from 'nanoid';
 import { Repository } from 'typeorm';
-import { SessionDto, SignUpDto } from '../auth/auth.dto';
+import { SignUpDto } from '../auth/auth.dto';
 import { configService } from '../pkg/config/config.service';
 import { UserRoleEntity } from '../pkg/dal/user-role/user-role.entity';
 import { USER_ROLE } from '../pkg/dal/user-role/user-role.interface';
@@ -48,7 +48,7 @@ export class UserService {
     return Promise.resolve(result);
   }
 
-  async createGuest(issuer: UserEntity): Promise<SessionDto> {
+  async createGuest(issuer: UserEntity): Promise<any> {
     const hashedPassword = await bcryptjs.hash(
       nanoid(),
       configService.getSaltRounds()
@@ -57,14 +57,11 @@ export class UserService {
     user.username = `guest_${nanoid()}`;
     user.email = `${user.username}@guest.guest`;
     user.password = hashedPassword;
+    user.issuer = issuer;
+
     const userRole = this.userRoleRepository.create();
     userRole.role = USER_ROLE.GUEST;
     user.userRoles = [userRole];
-    user.issuer = issuer;
-
-    await this.userRepository.save(user).catch((error) => {
-      throw new InternalServerErrorException(error.message);
-    });
 
     const payload: JwtPayload = jwtPayloadFactory(user);
     const accessToken = await this.jwtService.sign(payload, {
@@ -72,18 +69,16 @@ export class UserService {
     });
     const userSession = this.userSessionRepository.create();
     userSession.accessToken = accessToken;
-    userSession.user = user;
+    user.userSessions = [userSession];
 
-    const result = await this.userSessionRepository
-      .save(userSession)
-      .catch((error) => {
-        throw new InternalServerErrorException(error.message);
-      });
+    console.log(user);
+    const result = await this.userRepository.save(user).catch((error) => {
+      throw new InternalServerErrorException(error.message);
+    });
 
     return Promise.resolve({
-      accessToken: result.accessToken,
-
-      refreshToken: result.refreshToken,
+      id: result.id,
+      token: result.userSessions[0].accessToken,
     });
   }
 
