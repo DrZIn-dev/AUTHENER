@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/DrZIn-dev/AUTHENER/compare/v1.0.0...v1.0.1) (2022-02-10)
+
+
+### Bug Fixes
+
+* **swagger:** patch swagger version ([9f6ab61](https://github.com/DrZIn-dev/AUTHENER/commit/9f6ab61cb41aaef0f1c3c284388a6b190428421d))
+
 # 1.0.0 (2022-02-10)
 
 
