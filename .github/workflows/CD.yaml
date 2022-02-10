@@ -1,0 +1,75 @@
+name: Automate CD
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.package-version.outputs.current-version}}
+    steps:
+      - uses: actions/checkout@v2
+      - run: yarn install && npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: current get-npm-version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@master
+
+  # dockerize:
+  #   runs-on: ubuntu-latest
+  #   needs:
+  #     - release
+  #   outputs:
+  #     image_name: ${{ steps.set_image_name.outputs.image_name}}
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - run: echo "${{needs.release.outputs.version}}"
+  #     - name: Set up QEMU
+  #       uses: docker/setup-qemu-action@v1
+  #     - name: Set up Docker Buildx
+  #       uses: docker/setup-buildx-action@v1
+  #     - name: Log in to GitHub Docker Registry
+  #       uses: docker/login-action@v1
+  #       with:
+  #         registry: ghcr.io
+  #         username: ${{ github.actor }}
+  #         password: ${{ secrets.PAT }}
+  #     - name: lowercase repository
+  #       id: repository
+  #       uses: ASzc/change-string-case-action@v1
+  #       with:
+  #         string: ${{ github.repository }}
+  #     - name: Build container image
+  #       uses: docker/build-push-action@v2
+  #       with:
+  #         platforms: linux/arm64
+  #         cache-from: type=gha
+  #         cache-to: type=gha,mode=max
+  #         pull: true
+  #         push: true
+  #         file: ./.docker/Dockerfile
+  #         target: production
+  #         tags: |
+  #           ghcr.io/${{ steps.repository.outputs.lowercase }}:latest
+  #           ghcr.io/${{ steps.repository.outputs.lowercase }}:${{needs.release.outputs.version}}
+  #     - name: Set output variables
+  #       id: set_image_name
+  #       run: echo ::set-output name=image_name::"ghcr.io/${{ steps.repository.outputs.lowercase }}:${{needs.release.outputs.version}}"
+
+  # deploy:
+  #   runs-on: ubuntu-latest
+  #   needs:
+  #     - dockerize
+  #   steps:
+  #     - name: Install SSH Key
+  #       uses: shimataro/ssh-key-action@v2
+  #       with:
+  #         key: ${{ secrets.LAB_PRIVATE_KEY }}
+  #         known_hosts: "just-a-placeholder-so-we-dont-get-errors"
+  #     - name: Adding Known Hosts
+  #       run: ssh-keyscan -p 2662 -H bizarre-lab.thddns.net >> ~/.ssh/known_hosts
+  #     - name: Update Mongo Stream Service
+  #       run: ssh root@bizarre-lab.thddns.net -p 2662 'docker pull ${{needs.dockerize.outputs.image_name}} && docker service update --image ${{needs.dockerize.outputs.image_name}} v4_lab_bizarre_functions'
