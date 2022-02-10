@@ -82,6 +82,22 @@ export class UserService {
     });
   }
 
+  async deleteOneGuest(id: string, user: UserEntity) {
+    // admin and guest issuer can delete user
+    const guestUser = await this.userRepository.findOne(id, {
+      relations: ['issuer', 'userRoles', 'userSessions'],
+    });
+    const isIssuer = guestUser.issuer?.id === user.id;
+    const isAdmin = user.userRoles.some(
+      (userRole) => userRole.role === USER_ROLE.ADMIN
+    );
+    if (!isIssuer && !isAdmin) {
+      throw new BadRequestException('user_dont_have_permission');
+    }
+    await this.userRepository.softRemove(guestUser);
+    return Promise.resolve();
+  }
+
   async getAll(skip: number, limit: number): Promise<UserEntity[]> {
     const result = await this.userRepository.find({
       skip,

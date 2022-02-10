@@ -42,6 +42,14 @@ export class UserController {
     return this.userService.createGuest(user);
   }
 
+  @Delete('/guest/:id')
+  @ApiOkResponse({ type: UserEntity })
+  @Roles(...[USER_ROLE.ADMIN, USER_ROLE.USER])
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  deleteOneGuest(@Param('id') id: string, @User() user: UserEntity) {
+    return this.userService.deleteOneGuest(id, user);
+  }
+
   @Get('/')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
