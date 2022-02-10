@@ -15,7 +15,7 @@ import { UserModule } from './user/user.module';
           target: 'pino-http-print',
           options: {
             destination: 1,
-            all: false,
+            all: true,
             translateTime: true,
           },
         },

@@ -7,3 +7,11 @@ services:
       POSTGRES_PASSWORD: meDev2021m
     ports:
       - 5432:5432
+  back_end:
+    build:
+      context: .
+      dockerfile: ./apps/back-end/Dockerfile
+    env_file:
+      - apps/back-end/.env
+    environment:
+      POSTGRES_HOST: postgres

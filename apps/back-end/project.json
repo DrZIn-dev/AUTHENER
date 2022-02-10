@@ -10,13 +10,15 @@
         "outputPath": "dist/apps/back-end",
         "main": "apps/back-end/src/main.ts",
         "tsConfig": "apps/back-end/tsconfig.app.json",
-        "assets": []
+        "assets": [],
+        "generatePackageJson": true
       },
       "configurations": {
         "production": {
           "optimization": true,
           "extractLicenses": true,
           "inspect": false,
+          "generatePackageJson": true,
           "fileReplacements": [
             {
               "replace": "apps/back-end/src/environments/environment.ts",
