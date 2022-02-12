@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/DrZIn-dev/AUTHENER/compare/v1.0.1...v1.0.2) (2022-02-12)
+
+
+### Bug Fixes
+
+* **actions:** remove platform from dockerize ([e2245f8](https://github.com/DrZIn-dev/AUTHENER/commit/e2245f83624f1430946c6a06e22a0154b1238298))
+
 ## [1.0.1](https://github.com/DrZIn-dev/AUTHENER/compare/v1.0.0...v1.0.1) (2022-02-10)
 
 
